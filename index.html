@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration & Postcode Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full bg-slate-900 text-slate-100 flex items-center justify-center p-4">
+    <div class="w-full max-w-xl bg-slate-800 border border-slate-700 shadow-2xl rounded-xl p-6 sm:p-8 my-8">
+        <div class="mb-6 text-center">
+            <h1 class="text-2xl font-bold tracking-tight text-white">User Details Form</h1>
+            <p class="text-sm text-slate-400 mt-1">Please enter the registration and postcode for all 6 users.</p>
+        </div>
+
+        <form id="userForm" class="space-y-4">
+            <!-- Dynamic Rows Generated via JS for 6 Users -->
+            <div id="userRowsContainer" class="space-y-3">
+                <!-- User rows will be injected here -->
+            </div>
+
+            <button type="submit" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-150 shadow-lg shadow-indigo-600/30 cursor-pointer">
+                Submit Information
+            </button>
+        </form>
+
+        <div id="successMessage" class="hidden mt-4 p-4 bg-emerald-950/80 border border-emerald-600/50 rounded-lg text-emerald-300 text-sm text-center">
+            🎉 Success! Form data successfully recorded. Check your browser console to view the collected object.
+        </div>
+    </div>
+
+    <script>
+        const totalUsers = 6;
+        const container = document.getElementById('userRowsContainer');
+
+        // Generate 6 vertical user rows
+        for (let i = 1; i <= totalUsers; i++) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'bg-slate-900/60 border border-slate-700/60 rounded-lg p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3';
+            
+            rowDiv.innerHTML = `
+                <div class="w-full sm:w-28 shrink-0 flex items-center">
+                    <span class="text-sm font-semibold text-indigo-400">User ${i}</span>
+                </div>
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1 sm:hidden">Registration</label>
+                        <input type="text" 
+                               name="user_${i}_reg" 
+                               placeholder="Registration" 
+                               required
+                               class="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-1.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1 sm:hidden">Postcode</label>
+                        <input type="text" 
+                               name="user_${i}_postcode" 
+                               placeholder="Postcode" 
+                               required
+                               class="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-1.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+                </div>
+            `;
+            container.appendChild(rowDiv);
+        }
+
+        // Handle Form Submission
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+
+            for (let [key, value] of formData.entries()) {
+                data[key] = value.trim();
+            }
+
+            console.log('Submitted User Data:', data);
+            
+            // Show success message
+            const successBox = document.getElementById('successMessage');
+            successBox.classList.remove('hidden');
+            successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>
